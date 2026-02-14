@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Order - Shannon's Sweet Treats</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍫</span>
+                <span>Shannon's <span>Sweet Treats</span></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="order.html" class="active">Order</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>Place Your Order</h1>
+            <p>Fresh chocolates made just for you</p>
+        </div>
+    </header>
+
+    <section class="order-section">
+        <div class="container">
+            <div class="order-grid">
+                <div class="order-form-container">
+                    <h2>Order Details</h2>
+                    <div id="orderStatus"></div>
+                    <form id="orderForm" method="POST" action="/submit-order">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>What would you like to order? *</label>
+                            <div class="product-selection">
+                                <div class="product-selection-item">
+                                    <span>Dark Chocolate Truffles (12pc)</span>
+                                    <div class="quantity-input">
+                                        <button type="button" class="quantity-btn" onclick="adjustQuantity('dark', -1)">-</button>
+                                        <input type="number" id="dark" name="dark" value="0" min="0" style="width: 60px; text-align: center;">
+                                        <button type="button" class="quantity-btn" onclick="adjustQuantity('dark', 1)">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-selection-item">
+                                    <span>Milk Chocolate Assortment (12pc)</span>
+                                    <div class="quantity-input">
+                                        <button type="button" class="quantity-btn" onclick="adjustQuantity('milk', -1)">-</button>
+                                        <input type="number" id="milk" name="milk" value="0" min="0" style="width: 60px; text-align: center;">
+                                        <button type="button" class="quantity-btn" onclick="adjustQuantity('milk', 1)">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-selection-item">
+                                    <span>Assorted Gift Box (12pc)</span>
+                                    <div class="quantity-input">
+                                        <button type="button" class="quantity-btn" onclick="adjustQuantity('mixed', -1)">-</button>
+                                        <input type="number" id="mixed" name="mixed" value="0" min="0" style="width: 60px; text-align: center;">
+                                        <button type="button" class="quantity-btn" onclick="adjustQuantity('mixed', 1)">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-selection-item">
+                                    <span>Large Gift Box (24pc)</span>
+                                    <div class="quantity-input">
+                                        <button type="button" class="quantity-btn" onclick="adjustQuantity('large', -1)">-</button>
+                                        <input type="number" id="large" name="large" value="0" min="0" style="width: 60px; text-align: center;">
+                                        <button type="button" class="quantity-btn" onclick="adjustQuantity('large', 1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Special Requests or Notes</label>
+                            <textarea id="notes" name="notes" placeholder="Any allergies, custom requests, or special instructions..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Preferred Pickup/Delivery *</label>
+                            <select name="delivery" required>
+                                <option value="">Select an option...</option>
+                                <option value="pickup">Local Pickup</option>
+                                <option value="delivery">Local Delivery</option>
+                                <option value="shipping">Shipping</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>When do you need it? *</label>
+                            <input type="date" name="date" required>
+                            <small style="color: var(--chocolate-medium);">Please allow at least 3 days for orders</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Order Request</button>
+                    </form>
+                </div>
+
+                <div class="order-info-card">
+                    <h4>📋 Ordering Info</h4>
+                    <ul>
+                        <li>Orders require 3 days notice minimum</li>
+                        <li>Large orders (50+ pieces) need 1 week</li>
+                        <li>Custom orders welcome - just ask!</li>
+                        <li>Payment due at pickup/delivery</li>
+                        <li>Cash, Venmo, or PayPal accepted</li>
+                    </ul>
+
+                    <h4 style="margin-top: 2rem;">💰 Pricing</h4>
+                    <ul>
+                        <li>Small Box (6pc): $12</li>
+                        <li>Medium Box (12pc): $24</li>
+                        <li>Large Box (24pc): $45</li>
+                        <li>Custom: Contact for quote</li>
+                    </ul>
+
+                    <h4 style="margin-top: 2rem;">📍 Pickup</h4>
+                    <p>Local pickup available. Address provided after order confirmation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Shannon's <span>Sweet Treats</span></h3>
+                    <p>Handcrafted artisanal chocolates made with love.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/p/Shannons-Sweet-Treats-100075797623467/" target="_blank">📘</a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="order.html">Order</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="contact.html">Get in Touch</a></li>
+                        <li><a href="https://www.facebook.com/p/Shannons-Sweet-Treats-100075797623467/" target="_blank">Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Shannon's Sweet Treats. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function adjustQuantity(id, change) {
+            const input = document.getElementById(id);
+            let value = parseInt(input.value) + change;
+            if (value < 0) value = 0;
+            input.value = value;
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const statusDiv = document.getElementById('orderStatus');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting Order...';
+            statusDiv.innerHTML = '<p style="color: #8B7355; padding: 1rem; background: #FFF8E7; border-radius: 8px; margin-bottom: 1rem;">📤 Sending your order...</p>';
+            
+            try {
+                const formData = new FormData(e.target);
+                const response = await fetch('/submit-order', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    statusDiv.innerHTML = '<p style="color: #2D5016; padding: 1rem; background: #E8F5E9; border-radius: 8px; margin-bottom: 1rem;">✅ ' + result.message + '</p>';
+                    e.target.reset(); // Clear form
+                } else {
+                    throw new Error(result.error || 'Unknown error');
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '<p style="color: #8B0000; padding: 1rem; background: #FFE8E8; border-radius: 8px; margin-bottom: 1rem;">❌ ' + error.message + '</p>';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Order Request';
+            }
+        });
+    </script>
+</body>
+</html>

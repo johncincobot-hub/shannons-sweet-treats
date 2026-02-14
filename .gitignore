@@ -1,0 +1,12 @@
+# Logs
+*.log
+npm-debug.log*
+.DS_Store
+
+# Environment variables (if you add a local .env for testing)
+.env
+.env.local
+
+# Cloudflare
+.wrangler/
+wrangler.toml
