@@ -1,0 +1,106 @@
+// Cloudflare Pages Function to handle order submissions
+// This runs serverless on Cloudflare's edge network
+
+export async function onRequestPost(context) {
+  try {
+    const formData = await context.request.formData();
+    
+    // Extract form fields
+    const order = {
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      dark: formData.get('dark') || 0,
+      milk: formData.get('milk') || 0,
+      mixed: formData.get('mixed') || 0,
+      large: formData.get('large') || 0,
+      notes: formData.get('notes') || '',
+      delivery: formData.get('delivery'),
+      date: formData.get('date'),
+    };
+
+    // Build email body
+    const emailBody = `
+New Order from Shannon's Sweet Treats!
+
+Customer: ${order.firstName} ${order.lastName}
+Email: ${order.email}
+Phone: ${order.phone}
+
+Order Details:
+- Dark Chocolate Truffles (12pc): ${order.dark}
+- Milk Chocolate Assortment (12pc): ${order.milk}
+- Assorted Gift Box (12pc): ${order.mixed}
+- Large Gift Box (24pc): ${order.large}
+
+Delivery Method: ${order.delivery}
+Needed By: ${order.date}
+
+Special Notes:
+${order.notes || 'None'}
+
+---
+This order was submitted via shannonssweettreats.com
+Reply to ${order.email} to confirm the order.
+    `.trim();
+
+    // Send email via Resend API
+    const RESEND_API_KEY = context.env.RESEND_API_KEY;
+    const SHANNON_EMAIL = context.env.SHANNON_EMAIL || 'shannon@example.com';
+
+    if (!RESEND_API_KEY) {
+      console.error('RESEND_API_KEY not set');
+      return new Response(JSON.stringify({ 
+        success: false, 
+        error: 'Email service not configured' 
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const emailResponse = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Shannon\'s Sweet Treats <orders@technicianb.com>',
+        to: [SHANNON_EMAIL],
+        reply_to: order.email,
+        subject: `New Order: ${order.firstName} ${order.lastName} - ${order.date}`,
+        text: emailBody,
+      }),
+    });
+
+    if (!emailResponse.ok) {
+      const errorText = await emailResponse.text();
+      console.error('Resend API error:', errorText);
+      throw new Error('Failed to send email');
+    }
+
+    // Success!
+    return new Response(JSON.stringify({ 
+      success: true,
+      message: 'Order received! Shannon will contact you soon.' 
+    }), {
+      status: 200,
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
+
+  } catch (error) {
+    console.error('Error processing order:', error);
+    return new Response(JSON.stringify({ 
+      success: false,
+      error: 'Failed to process order. Please try again or contact us directly.' 
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}
