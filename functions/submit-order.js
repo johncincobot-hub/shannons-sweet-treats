@@ -67,7 +67,7 @@ Reply to ${order.email} to confirm the order.
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Shannon\'s Sweet Treats <orders@technicianb.com>',
+        from: 'Shannon\'s Sweet Treats <onboarding@resend.dev>',
         to: [SHANNON_EMAIL],
         reply_to: order.email,
         subject: `New Order: ${order.firstName} ${order.lastName} - ${order.date}`,
